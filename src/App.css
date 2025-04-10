@@ -1,6 +1,22 @@
 #root {
-  max-width: 1280px;
+  max-width: 100vh;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  font-family: 'Inter', sans-serif;
+}
+
+#App {
+  font-size: 16px; /* Tamanho base da fonte */
+}
+
+#App h1 {
+  font-size: 4rem !important; /* Forçando um tamanho maior com !important */
+  font-weight: 700;
+  margin: 0;
+}
+
+#App p {
+  font-size: 1rem; /* 16px */
+  line-height: 1.6;
 }
