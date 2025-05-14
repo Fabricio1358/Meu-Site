@@ -1,14 +1,25 @@
+// Module imports
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
+// Styles
 import './App.css'
+
+// Components
+import Loading from './components/Loading/loading.tsx'
+
+// Assets
+
+// Pages
+import Home from './pages/Home/home.tsx'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Olá, mundo! <br />
-        </p>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Loading />} />
+        <Route path="/Home" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
