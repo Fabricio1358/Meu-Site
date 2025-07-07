@@ -1,5 +1,4 @@
 import Header from '../../components/header/header';
-import TodoList from '../../utils/toDo/toDo';
 import './home.css';
 
 export default function Home() {
@@ -7,7 +6,7 @@ export default function Home() {
     <>
       <Header nome="Menu" />
       <div className="content_main">
-        <TodoList />
+          <h1>Conteudo</h1>
       </div>
     </>
   );
