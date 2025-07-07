@@ -1,10 +1,14 @@
-function Home() {
+import Header from '../../components/header/header';
+import TodoList from '../../utils/toDo/toDo';
+import './home.css';
+
+export default function Home() {
   return (
-    <div>
-      <h1>Home</h1>
-      <p>Welcome to the home page!</p>
-    </div>
+    <>
+      <Header nome="Menu" />
+      <div className="content_main">
+        <TodoList />
+      </div>
+    </>
   );
 }
-
-export default Home;

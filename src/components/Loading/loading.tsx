@@ -1,25 +1,29 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function LoadingPage() {
+type LoadingPageProps = {
+  destino: string;
+};
+
+function LoadingPage({ destino }: LoadingPageProps) {
   const navigate = useNavigate();
   const [dots, setDots] = useState('');
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setDots(prev => (prev.length >= 3 ? '' : prev + '.'));
+      setDots((prev) => (prev.length >= 3 ? '' : prev + '.'));
     }, 500);
 
     const timer = setTimeout(() => {
       clearInterval(interval);
-      navigate('/Home');
+      navigate(`/${destino}`);
     }, 3000);
 
     return () => {
       clearInterval(interval);
       clearTimeout(timer);
     };
-  }, [navigate]);
+  }, [navigate, destino]);
 
   return (
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
@@ -28,4 +32,4 @@ function LoadingPage() {
   );
 }
 
-export default LoadingPage
+export default LoadingPage;
