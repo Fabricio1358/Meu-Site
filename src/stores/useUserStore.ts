@@ -1,0 +1,1 @@
+// Guarda dados do usuário logado acessíveis de qualquer lugar

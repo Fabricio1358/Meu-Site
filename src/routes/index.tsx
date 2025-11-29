@@ -1,17 +1,31 @@
-// React
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { lazy, Suspense } from 'react'; // <--- Importante
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { MainLayout } from '@/layouts/MainLayout';
 
-// Views
-import Home from "../pages/home/home.tsx"
-import Teste from "../pages/teste/teste.tsx"
+// --- IMPORTAÇÕES PREGUIÇOSAS (LAZY) ---
+const Home = lazy(() => import('@/pages/home'));
 
-export default function AppRoutes() {
+const ProjectsPlaceholder = () => <h1>Experimentos (Em breve)</h1>;
+
+// Um componente simples de Loading para aparecer na troca de tela
+const Loading = () => <div className="p-4 text-center">Carregando...</div>;
+
+export const AppRoutes = () => {
      return (
           <BrowserRouter>
-               <Routes>
-                    <Route path='/' element={<Home />} />
-                    <Route path='/teste' element={<Teste />} />
-               </Routes>
+               {/* O Suspense precisa envolver as rotas que são Lazy */}
+               <Suspense fallback={<Loading />}>
+                    <Routes>
+                         <Route element={<MainLayout />}>
+
+                              <Route path="/" element={<Home />} />
+
+                              <Route path="/projects" element={<ProjectsPlaceholder />} />
+
+                              <Route path="*" element={<div>Página não encontrada</div>} />
+                         </Route>
+                    </Routes>
+               </Suspense>
           </BrowserRouter>
-     )
-}
+     );
+};

@@ -1,7 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Maven+Pro:wght@400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
 :root {
-     font-family: Inter;
+     font-family: 'Inter', system-ui, -apple-system, sans-serif;
      line-height: 1.5;
      font-weight: 400;
 
@@ -15,10 +13,32 @@
      -moz-osx-font-smoothing: grayscale;
 }
 
+*,
+*::before,
+*::after {
+     box-sizing: border-box;
+}
+
 body {
      margin: 0;
-     display: flex;
-     place-items: center;
      min-width: 320px;
      min-height: 100vh;
+}
+
+#root {
+     isolation: isolate;
+     min-height: 100vh;
+     display: flex;
+     flex-direction: column;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+     font-family: 'Inter Tight', sans-serif;
+     font-weight: 700;
+     margin: 0;
 }

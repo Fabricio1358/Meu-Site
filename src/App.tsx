@@ -1,11 +1,11 @@
-// React
-import './App.css';
-
 // Routes
-import AppRoutes from './routes';
+import { AppRoutes } from '@/routes';
 
-export default function App() {
+function App() {
      return (
+          // No futuro, aqui entrarão outros Providers (Auth, Theme, etc.)
           <AppRoutes />
      );
 }
+
+export default App;
