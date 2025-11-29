@@ -1,27 +1,11 @@
-// Module imports
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-// Styles
+// React
 import './App.css';
 
-// Components
-import Loading from './components/Loading/loading.tsx';
+// Routes
+import AppRoutes from './routes';
 
-// Assets
-
-// Pages
-import Home from './pages/home/home.tsx';
-
-function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Loading destino="home" />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/utils" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
-  );
+export default function App() {
+     return (
+          <AppRoutes />
+     );
 }
-
-export default App;
