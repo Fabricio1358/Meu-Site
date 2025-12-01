@@ -1,0 +1,49 @@
+src/
+├── assets/                  # Imagens estáticas, fontes, ícones globais (svgs)
+├── config/                  # Configurações de inicialização (ex: firebase-setup.ts, envs)
+├── lib/                     # Configurações de bibliotecas (ex: axios-instance.ts, query-client.ts)
+│
+├── components/              # 🧱 UI KIT GLOBAL (Burros e Reutilizáveis)
+│   ├── ui/                  # Componentes base (Button, Input, Modal, Card)
+│   ├── form/                # Componentes de formulário compostos
+│   └── layout/              # Componentes estruturais (Container, Grid)
+│
+├── hooks/                   # 🪝 HOOKS GLOBAIS
+│   ├── useTheme.ts          # Controle de Dark/Light mode
+│   ├── useMediaQuery.ts     # Responsividade via JS
+│   └── useDebounce.ts       # Performance de digitação
+│
+├── layouts/                 # 🖼️ MOLDURAS DAS PÁGINAS
+│   ├── MainLayout.tsx       # Header + Footer + Outlet
+│   ├── AuthLayout.tsx       # Layout limpo para Login/Register
+│   └── DashboardLayout.tsx  # Sidebar + Header + Outlet
+│
+├── features/                # 🚀 O CORAÇÃO DO SISTEMA (Onde vivem as funcionalidades)
+│   ├── auth/                # Funcionalidade de Autenticação
+│   │   ├── api/             # 📡 SERVICES (Login, Logout, ResetPassword - chamadas puras)
+│   │   ├── components/      # Componentes exclusivos de Auth (LoginForm, RegisterForm)
+│   │   ├── routes/          # Rotas internas de Auth
+│   │   └── types/           # Tipagens TS exclusivas de Auth
+│   │
+│   ├── blog/                # Funcionalidade de Blog
+│   │   ├── api/             # 📡 SERVICES (getPosts, createPost - chamadas Firebase)
+│   │   ├── hooks/           # 🪝 HOOKS DO BLOG (usePosts, useCreatePost - lógica de estado)
+│   │   ├── components/      # (PostCard, CommentSection)
+│   │   └── pages/           # As páginas em si (BlogHome, PostDetails)
+│   │
+│   └── dashboard/           # Outra feature...
+│
+├── routes/                  # 🚦 ROTEAMENTO
+│   ├── index.tsx            # Arquivo principal que junta todas as rotas
+│   └── ProtectedRoute.tsx   # Componente que chuta quem não tá logado
+│
+├── stores/                  # 🧠 ESTADO GLOBAL (Zustand/Context)
+│   └── useUserStore.ts      # Guarda dados do usuário logado acessíveis de qualquer lugar
+│
+├── types/                   # 🏷️ TIPAGENS GLOBAIS (Interfaces que o app todo usa)
+├── utils/                   # 🛠️ FERRAMENTAS PURAS (Formatadores, Validadores)
+│   ├── formatDate.ts
+│   └── formatCurrency.ts
+│
+├── App.tsx                  # Ponto de entrada
+└── main.tsx                 # Renderização no DOM

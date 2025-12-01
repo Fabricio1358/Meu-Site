@@ -1,0 +1,21 @@
+.mainLayout-main {
+     display: flex;
+     width: 100vw;
+     height: 100vh;
+     overflow: hidden;
+}
+
+.mainLayout-section {
+     display: flex;
+     flex-direction: column;
+     flex: 1;
+}
+
+.mainLayout-outlet {
+     display: flex;
+     flex: 1;
+     padding: 2rem;
+     justify-content: center;
+     align-items: start;
+     overflow-y: auto;
+}

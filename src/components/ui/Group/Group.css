@@ -1,0 +1,60 @@
+.group {
+     margin-bottom: 0.4rem;
+}
+
+/* O Botão (Gatilho) */
+.group-trigger {
+     width: 100%;
+     display: flex;
+     padding: 0.5rem 0;
+     justify-content: start;
+     align-items: center;
+     background-color: transparent;
+     border: none;
+     cursor: pointer;
+     color: white;
+     font-weight: 600;
+     transition: background 0.2s;
+}
+
+.arrow-icon {
+     transition: transform 0.3s ease;
+     width: 16px;
+     margin-right: 6px;
+     transform: scale(1.2);
+}
+
+.arrow-icon.rotate {
+     transform: rotate(90deg) scale(1.2);
+}
+
+/* --- ANIMAÇÃO --- */
+
+.group-content {
+     display: grid;
+     grid-template-rows: 0fr;
+     transition: grid-template-rows 0.2s ease-out;
+     padding: 0 !important;
+     margin: 0 !important;
+}
+
+.group-content.open {
+     grid-template-rows: 1fr;
+}
+
+.group-content-inner {
+     overflow: hidden;
+     min-height: 0;
+     display: flex;
+     flex-direction: column;
+     gap: 5px;
+     padding-left: 24px;
+     padding-bottom: 0.3rem;
+     padding-top: 0rem;
+     opacity: 0;
+     transition: opacity 0.2s ease-out;
+}
+
+.group-content.open .group-content-inner {
+     opacity: 1;
+}

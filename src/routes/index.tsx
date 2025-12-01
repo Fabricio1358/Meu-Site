@@ -1,3 +1,4 @@
+// src\routes\index.tsx
 import { lazy, Suspense } from 'react'; // <--- Importante
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { MainLayout } from '@/layouts/MainLayout';
@@ -7,13 +8,11 @@ const Home = lazy(() => import('@/pages/home'));
 
 const ProjectsPlaceholder = () => <h1>Experimentos (Em breve)</h1>;
 
-// Um componente simples de Loading para aparecer na troca de tela
-const Loading = () => <div className="p-4 text-center">Carregando...</div>;
+const Loading = () => <div>Carregando...</div>;
 
 export const AppRoutes = () => {
      return (
           <BrowserRouter>
-               {/* O Suspense precisa envolver as rotas que são Lazy */}
                <Suspense fallback={<Loading />}>
                     <Routes>
                          <Route element={<MainLayout />}>

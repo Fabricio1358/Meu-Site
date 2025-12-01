@@ -11,6 +11,16 @@
      text-rendering: optimizeLegibility;
      -webkit-font-smoothing: antialiased;
      -moz-osx-font-smoothing: grayscale;
+
+     /* Cores */
+     --fundo: #242424;
+     --preto: #202020;
+     --cinza-escuro: #404040;
+     --cinza: #929292;
+}
+
+a {
+     transition: ease-in-out 0.2s;
 }
 
 *,
@@ -41,4 +51,30 @@ h6 {
      font-family: 'Inter Tight', sans-serif;
      font-weight: 700;
      margin: 0;
+}
+
+h1 {
+     font-size: 48px
+}
+
+h2 {
+     font-size: 36px
+}
+
+h3 {
+     font-size: 24px
+}
+
+h4 {
+     font-size: 18px;
+     font-weight: 500;
+}
+
+a,
+Link {
+     font-size: 14px
+}
+
+p {
+     font-size: 12px;
 }
