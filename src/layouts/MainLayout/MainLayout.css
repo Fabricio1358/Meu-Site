@@ -1,22 +1,46 @@
 .mainLayout-main {
      display: flex;
-     flex-direction: column;
+     flex-direction: row;
      width: 100vw;
      height: 100vh;
      overflow: hidden;
 }
 
-.mainLayout-section {
+.mainLayout-side {
      display: flex;
-     flex-direction: row;
-     flex: 1;
+     flex-direction: column;
+     width: var(--side-width);
+     height: 100%;
+     background-color: var(--preto);
+     border-right: 1px solid var(--cinza-escuro);
+     flex-shrink: 0;
+     transition: width 0.3s ease;
 }
 
-.mainLayout-outlet {
+.mainLayout-titulo {
      display: flex;
+     height: 70px;
+     padding: 0 1.5rem;
+     justify-content: space-between;
+     align-items: center;
+}
+
+.mainLayout-nav-container {
      flex: 1;
-     padding: 2rem;
-     justify-content: center;
-     align-items: start;
      overflow-y: auto;
+}
+
+.mainLayout-content {
+     display: flex;
+     flex-direction: column;
+     flex: 1;
+     height: 100%;
+     position: relative;
+}
+
+.mainLayout-page-scroll {
+     flex: 1;
+     overflow-y: auto;
+     padding: 4rem 2rem;
+     scroll-behavior: smooth;
 }

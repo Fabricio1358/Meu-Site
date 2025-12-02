@@ -1,6 +1,6 @@
 // src\layouts\MainLayout\index.tsx
 import './MainLayout.css'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import { useState } from 'react'
 
 import Header from '@/components/Header'
@@ -14,18 +14,29 @@ export const MainLayout = () => {
 
      return (
           <main className='mainLayout-main'>
-               <Header onSetSidebar={setIsSidebarOpen} />
-
-               <section className='mainLayout-section'>
-
-                    {isSidebarOpen && isDocRoute && (
-                         <DocSidebar />
-                    )}
-
-                    <div className='mainLayout-outlet'>
-                         <Outlet />
+               <div className='mainLayout-side'>
+                    {/* Titulo + Sidebar */}
+                    <div className='mainLayout-titulo'>
+                         <Link to="/">
+                              <h3>Meu Site</h3>
+                         </Link>
+                         <p>temp v1.0.0</p>
                     </div>
 
+                    {isSidebarOpen && isDocRoute && (
+                         <div className="mainLayout-nav-container">
+                              <DocSidebar />
+                         </div>
+                    )}
+               </div>
+
+               {/* Header + Content */}
+               <section className='mainLayout-content'>
+                    <Header onSetSidebar={setIsSidebarOpen} />
+
+                    <div className="mainLayout-page-scroll">
+                         <Outlet />
+                    </div>
                </section>
           </main>
      );

@@ -1,25 +1,27 @@
-p {
-     margin: 0.5rem 0 0 0;
-     opacity: 0.9;
-}
-
 .docLayout-content h2 {
      margin-top: 2rem;
 }
 
 .docLayout-main {
      display: flex;
+     position: relative;
      flex: 1;
-     padding: 3rem 2rem;
+     padding: 0;
 }
 
+/* Content */
 .docLayout-content {
      display: flex;
      flex-direction: column;
      width: 80%;
-     padding: 0 15%;
+     padding: 0 10%;
      justify-content: start;
      align-items: start;
+}
+
+.docLayout-content p {
+     margin: 0.5rem 0 0 0;
+     opacity: 0.9;
 }
 
 .docLayout-date {
@@ -34,12 +36,17 @@ p {
      margin-bottom: 8px;
 }
 
+/* Topics */
 .docLayout-topics {
      display: flex;
+     position: sticky;
+     top: 0;
      flex-direction: column;
      width: 20%;
      justify-content: start;
      align-items: start;
+     z-index: 1;
+     height: fit-content;
 }
 
 .docLayout-topics h5 {
@@ -53,7 +60,6 @@ p {
      font-size: 16px;
 }
 
-/* src/components/layout/DocLayout/DocLayout.css */
 .docLayout-topics-item.active h4 {
      color: var(--blue-500);
      font-weight: 700;

@@ -8,26 +8,10 @@ interface HeaderProps {
 
 const Header = ({ onSetSidebar }: HeaderProps) => {
      return (
-          <header>
-               {/* Título e versão */}
-               <div className='header-titulo'>
-                    <Link to="/" onClick={() => onSetSidebar(false)}>
-                         <h3>Meu Site</h3>
-                    </Link>
-                    <p>temp v1.0.0</p>
-               </div>
-
+          <header id='header'>
                <div className="header-links">
                     <Link to="/docs" onClick={() => onSetSidebar(true)}>
                          <h4>Doc</h4>
-                    </Link>
-
-                    <Link to="/" onClick={() => onSetSidebar(false)}>
-                         <h4>Link 2</h4>
-                    </Link>
-
-                    <Link to="/" onClick={() => onSetSidebar(false)}>
-                         <h4>Link 3</h4>
                     </Link>
                </div>
           </header>
