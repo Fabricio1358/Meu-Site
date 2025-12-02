@@ -19,7 +19,7 @@
 
 .arrow-icon {
      transition: transform 0.3s ease;
-     width: 16px;
+     width: 16.3px;
      margin-right: 6px;
      transform: scale(1.2);
 }
@@ -48,7 +48,7 @@
      display: flex;
      flex-direction: column;
      gap: 5px;
-     padding-left: 24px;
+     padding-left: 32px;
      padding-bottom: 0.3rem;
      padding-top: 0rem;
      opacity: 0;

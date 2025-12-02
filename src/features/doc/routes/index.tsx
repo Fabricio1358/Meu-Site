@@ -8,6 +8,6 @@ const DocMateria1 = lazy(() => import("../pages/Materia1/Topico1"));
 export const DocRoutes = (
      <>
           <Route path="docs" element={<DocIntroducao />} />
-          <Route path="docs/materia1/topico1" element={<DocMateria1 />} />
+          <Route path="docs/desenvolviemento/ideias" element={<DocMateria1 />} />
      </>
 );
