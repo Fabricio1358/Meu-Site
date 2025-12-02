@@ -1,22 +1,31 @@
 // src\layouts\MainLayout\index.tsx
 import './MainLayout.css'
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom'
+import { useState } from 'react'
 
-// Components
-import Header from '@/components/layout/Header'
-import MainSidebar from '@/components/layout/MainSidebar'
+import Header from '@/components/Header'
+import DocSidebar from '@/features/doc/components/docSidebar';
 
 export const MainLayout = () => {
+     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+     const location = useLocation();
+
+     const isDocRoute = location.pathname.startsWith("/docs");
+
      return (
           <main className='mainLayout-main'>
-               <MainSidebar />
+               <Header onSetSidebar={setIsSidebarOpen} />
 
                <section className='mainLayout-section'>
-                    <Header />
+
+                    {isSidebarOpen && isDocRoute && (
+                         <DocSidebar />
+                    )}
 
                     <div className='mainLayout-outlet'>
                          <Outlet />
                     </div>
+
                </section>
           </main>
      );

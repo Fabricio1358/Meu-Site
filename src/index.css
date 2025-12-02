@@ -17,6 +17,9 @@
      --preto: #202020;
      --cinza-escuro: #404040;
      --cinza: #929292;
+
+     /* Medidas */
+     --side-width: 260px
 }
 
 a {
@@ -27,6 +30,10 @@ a {
 *::before,
 *::after {
      box-sizing: border-box;
+}
+
+html {
+     scroll-behavior: smooth;
 }
 
 body {

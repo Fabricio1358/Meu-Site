@@ -1,12 +1,10 @@
-// src\routes\index.tsx
-import { lazy, Suspense } from 'react'; // <--- Importante
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import { MainLayout } from '@/layouts/MainLayout';
+import { DocRoutes } from '@/features/doc/routes';
 
-// --- IMPORTAÇÕES PREGUIÇOSAS (LAZY) ---
 const Home = lazy(() => import('@/pages/home'));
-
-const ProjectsPlaceholder = () => <h1>Experimentos (Em breve)</h1>;
 
 const Loading = () => <div>Carregando...</div>;
 
@@ -16,10 +14,9 @@ export const AppRoutes = () => {
                <Suspense fallback={<Loading />}>
                     <Routes>
                          <Route element={<MainLayout />}>
-
                               <Route path="/" element={<Home />} />
 
-                              <Route path="/projects" element={<ProjectsPlaceholder />} />
+                              {DocRoutes}
 
                               <Route path="*" element={<div>Página não encontrada</div>} />
                          </Route>

@@ -1,5 +1,6 @@
 .mainLayout-main {
      display: flex;
+     flex-direction: column;
      width: 100vw;
      height: 100vh;
      overflow: hidden;
@@ -7,7 +8,7 @@
 
 .mainLayout-section {
      display: flex;
-     flex-direction: column;
+     flex-direction: row;
      flex: 1;
 }
 
