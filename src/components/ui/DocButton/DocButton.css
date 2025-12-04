@@ -1,0 +1,25 @@
+.docButton {
+     display: flex;
+     background-color: white;
+     cursor: pointer;
+}
+
+.docButton:hover {
+     transform: scale(1.2);
+     transition: ease-in-out 0.5s;
+}
+
+.docButtonOutline {
+     display: flex;
+     background-color: transparent;
+     cursor: pointer;
+     justify-content: center;
+     align-items: center;
+     font-size: 14px;
+     font-weight: 600;
+}
+
+.docButtonOutline:hover {
+     transform: translate(3px, 3px);
+     transition: ease-in-out 1s;
+}

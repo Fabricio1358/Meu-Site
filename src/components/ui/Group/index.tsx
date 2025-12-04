@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 
 interface GroupProps {
-     title: string;
+     title: React.ReactNode;
      children: React.ReactNode;
 }
 

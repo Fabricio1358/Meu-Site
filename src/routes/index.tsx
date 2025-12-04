@@ -1,3 +1,4 @@
+// src/routes/index.tsx
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -6,7 +7,7 @@ import { DocRoutes } from '@/features/doc/routes';
 
 const Home = lazy(() => import('@/pages/home'));
 
-const Loading = () => <div>Carregando...</div>;
+const Loading = () => <div style={{ padding: 20 }}>Carregando...</div>;
 
 export const AppRoutes = () => {
      return (

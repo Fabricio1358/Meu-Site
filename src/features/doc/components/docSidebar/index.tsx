@@ -1,13 +1,10 @@
 // src/features/doc/components/docSidebar/index.tsx
 import SidebarLayout from "@/components/layout/SidebarLayout";
-import groups from "../../data/groups";
 
 const DocSidebar = () => {
      return (
-          <>
-               <SidebarLayout variant="docs" groups={groups} />
-          </>
-     )
+          <SidebarLayout variant="docs" />
+     );
 };
 
 export default DocSidebar;
