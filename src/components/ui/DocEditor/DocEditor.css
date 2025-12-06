@@ -1,7 +1,16 @@
 .editor-block-wrapper {
      width: 100%;
      position: relative;
-     margin-bottom: 8px;
+     margin: 10px 0 0 0;
+     transition: min-height 0.2s ease;
+     min-height: 1.5em;
+}
+
+.editor-block-wrapper.is-empty {
+     min-height: 200px;
+     cursor: text;
+     display: flex;
+     align-items: flex-start;
 }
 
 .editor-input {
@@ -18,20 +27,20 @@
 .editor-h2 {
      font-size: 1.75rem;
      font-weight: 700;
-     margin-top: 1.5rem;
-     margin-bottom: 0.5rem;
+     margin-top: 1.2rem;
+     margin-bottom: 0.2rem;
 }
 
 .editor-h3 {
      font-size: 1.4rem;
      font-weight: 600;
-     margin-top: 1.2rem;
-     margin-bottom: 0.4rem;
+     margin-top: 1rem;
+     margin-bottom: 0.1rem;
 }
 
 .editor-paragraph {
      font-size: 1rem;
-     width: 100%;
+     line-height: 1.2;
 }
 
 .editor-list-wrapper {
@@ -49,8 +58,9 @@
      flex-shrink: 0;
 }
 
-.editor-input:empty::before {
-     content: attr(placeholder);
+.is-empty .editor-input::before {
+     content: attr(data-placeholder);
+     color: #ccc;
      pointer-events: none;
      display: block;
 }

@@ -1,10 +1,9 @@
 .docLayout-main {
      display: flex;
-     justify-content: center;
+     justify-content: space-between;
      align-items: flex-start;
-     max-width: 1200px;
-     margin: 0 auto;
-     padding: 60px 24px;
+     width: 100%;
+     padding: 4rem 10rem;
      gap: 60px;
 }
 
@@ -37,8 +36,12 @@
 }
 
 .editor-canvas {
+     display: flex;
+     flex-direction: column;
      width: 100%;
-     padding-bottom: 100px;
+     height: fit-content;
+     padding-bottom: 0px;
+     gap: 0;
 }
 
 .docLayout-topics {
@@ -46,7 +49,6 @@
      position: sticky;
      top: 40px;
      align-self: flex-start;
-
      padding-left: 20px;
      border-left: 1px solid #eee;
 }
@@ -85,6 +87,10 @@
 
 .docLayout-topics-item.active a {
      font-weight: 600;
+}
+
+.docLayout-topics-item.is-h3 {
+     padding-left: 20px;
 }
 
 @media (max-width: 1024px) {
