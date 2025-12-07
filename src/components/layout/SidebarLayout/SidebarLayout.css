@@ -27,4 +27,5 @@ a:hover {
      flex: 1;
      padding: 1.2rem 1.6rem;
      overflow-y: auto;
+     overflow-x: visible;
 }

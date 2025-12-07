@@ -2,11 +2,12 @@
      display: flex;
      background-color: white;
      cursor: pointer;
+     z-index: 1;
 }
 
 .docButton:hover {
-     transform: scale(1.2);
-     transition: ease-in-out 0.5s;
+     transform: scale(1.05);
+     transition: ease-in-out 0.2s;
 }
 
 .docButtonOutline {
@@ -17,9 +18,10 @@
      align-items: center;
      font-size: 14px;
      font-weight: 600;
+     z-index: 10;
 }
 
 .docButtonOutline:hover {
-     transform: translate(3px, 3px);
-     transition: ease-in-out 1s;
+     transform: translateY(-4px);
+     transition: ease-in-out 0.3s;
 }

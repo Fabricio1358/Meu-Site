@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { browserLocalPersistence, connectAuthEmulator, getAuth, setPersistence } from "firebase/auth";
+import { connectFirestoreEmulator, getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
 
 interface FirebaseConfig {
   apiKey: string;
@@ -23,9 +23,34 @@ const firebaseConfig: FirebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-const app = initializeApp(firebaseConfig);
+// Alterna entre Produção e Emulador
+const useEmulator = import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true';
 
+// Inicializa App
+export const app = initializeApp(firebaseConfig);
+
+// Firestore
+export const db = useEmulator
+    ? getFirestore(app)
+    : initializeFirestore(app, {
+          localCache: persistentLocalCache({
+              tabManager: persistentMultipleTabManager()
+          })
+      }, '(default)');
+
+// Auth
 export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const analytics = await isSupported().then(yes => yes ? getAnalytics(app) : null);
+setPersistence(auth, browserLocalPersistence);
+
+// Conectar aos emuladores se necessário
+if (useEmulator) {
+    console.log('🔥 Conectando aos emuladores Firebase...');
+    connectAuthEmulator(auth, 'http://127.0.0.1:9099');
+    connectFirestoreEmulator(db, '127.0.0.1', 8080);
+}
+
+export const analytics = isSupported().then((yes) => {
+    if (yes) getAnalytics(app);
+});
+
 export default app;
