@@ -17,7 +17,7 @@ interface EditorBlockProps {
      addBlock: (currentId: string) => void;
      removeBlock: (id: string) => void;
      focusId: string | null;
-     isLastBlock?: boolean;
+     isLastBlock: boolean;
 }
 
 const setCaretToEnd = (element: HTMLElement) => {
@@ -36,7 +36,8 @@ export const EditorBlock = ({
      transformBlock,
      addBlock,
      removeBlock,
-     focusId
+     focusId,
+     isLastBlock
 }: EditorBlockProps) => {
      const contentRef = useRef<HTMLElement>(null);
      const [justTransformed, setJustTransformed] = useState(false);
@@ -115,7 +116,12 @@ export const EditorBlock = ({
           }
      };
 
-     const wrapperClass = `editor-block-wrapper ${block.type === 'paragraph' && isEmpty ? 'is-empty' : ''}`;
+     const wrapperClass = `editor-block-wrapper ${block.type === 'paragraph' && isEmpty && isLastBlock
+               ? 'is-empty-final'
+               : block.type === 'paragraph' && isEmpty
+                    ? 'is-empty'
+                    : ''
+          }`;
 
      if (block.type === 'heading') {
           const Tag = `h${block.level}` as React.ElementType;

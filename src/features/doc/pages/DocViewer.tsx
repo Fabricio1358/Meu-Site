@@ -1,78 +1,162 @@
 import { useLocation } from "react-router-dom";
+import { useEffect, useState } from 'react';
 import DocLayout from '@/components/layout/DocLayout';
 import { useFirestore } from '@/hooks/useFirestore';
+import { firestoreService } from '@/services/firestoreService';
+import { queryHelpers } from '@/services/firestoreService';
 
-// Tipagem do dado que vem do banco (Precisamos expandir isso no futuro)
+// Tipagem padronizada
 interface LinkType {
      label: string;
      to: string;
-     // Futuramente você vai salvar isso no banco também:
-     description?: string;
      createdAt?: number;
 }
 
 interface SecaoFirestore {
      id?: string;
+     title: string;
      links: LinkType[];
+     createdAt: number;
 }
 
-const DocViewer = () => {
-     const { pathname } = useLocation(); // Pega a URL completa: /docs/secao/topico
+// Função centralizada para gerar IDs consistentes
+const generateDocId = (pathname: string): string => {
+     // Remove a primeira barra e substitui as demais por hífen
+     // Ex: /docs/documento/futuro -> docs-documento-futuro
+     return pathname.replace(/^\//, '').replace(/\//g, '-');
+};
 
-     // Busca todas as seções (Idealmente buscaríamos só a necessária, mas sua estrutura atual pede isso)
+const DocViewer = () => {
+     const { pathname } = useLocation();
+     const [initializing, setInitializing] = useState(false);
+     const [notFound, setNotFound] = useState(false);
+
+     // Busca todas as seções ordenadas
      const { data: sections, loading } = useFirestore<SecaoFirestore>(
-          'DocSidebarSecoes',
-          [] // Sem ordenação específica por enquanto ou use a sua padrão
+          'DocSecoes',
+          [queryHelpers.orderByDesc('createdAt')]
      );
 
-     if (loading) return <div style={{ padding: '20px' }}>Carregando documento...</div>;
-
-     // --- LÓGICA DE BUSCA ---
-     // Precisamos encontrar qual tópico (dentro de qual seção) corresponde à URL atual
+     // --- BUSCA O TÓPICO CORRESPONDENTE ---
      let foundTopic: LinkType | null = null;
+     let sectionTitle = '';
 
      for (const section of sections) {
-          if (section.links) {
+          if (section.links && Array.isArray(section.links)) {
                const match = section.links.find(link => link.to === pathname);
                if (match) {
                     foundTopic = match;
-                    break; // Achamos! Para o loop.
+                    sectionTitle = section.title;
+                    break;
                }
           }
      }
 
-     // Se não achou nada (URL inválida ou digitada errada)
-     if (!foundTopic) {
+     // --- INICIALIZA DOCUMENTO NO FIREBASE ---
+     useEffect(() => {
+          if (loading || !foundTopic) return;
+
+          const initializeDocument = async () => {
+               const documentId = generateDocId(pathname);
+
+               try {
+                    setInitializing(true);
+                    setNotFound(false);
+
+                    // Verifica se documento já existe
+                    const existingDoc = await firestoreService.get('DocContent', documentId);
+
+                    // Se não existe, cria com estrutura inicial
+                    if (!existingDoc) {
+                         console.log(`Criando documento: ${documentId}`);
+
+                         await firestoreService.createWithId('DocContent', documentId, {
+                              // Metadados do documento
+                              title: foundTopic.label,
+                              description: `Documentação sobre ${foundTopic.label}`,
+                              date: new Date().toLocaleDateString('pt-BR'),
+
+                              // Bloco inicial vazio
+                              blocks: [{
+                                   id: crypto.randomUUID(),
+                                   type: 'paragraph',
+                                   content: ''
+                              }],
+
+                              // Referências de organização
+                              pathname: pathname,
+                              section: sectionTitle,
+
+                              // Timestamps
+                              createdAt: Date.now(),
+                              updatedAt: Date.now()
+                         });
+
+                         console.log(`✅ Documento criado: ${documentId}`);
+                    } else {
+                         console.log(`✅ Documento já existe: ${documentId}`);
+                    }
+
+               } catch (error) {
+                    console.error('❌ Erro ao inicializar documento:', error);
+                    setNotFound(true);
+               } finally {
+                    setInitializing(false);
+               }
+          };
+
+          initializeDocument();
+     }, [pathname, foundTopic, loading, sectionTitle]);
+
+     // --- LOADING ---
+     if (loading || initializing) {
           return (
-               <div style={{ padding: '40px' }}>
-                    <h2>404 - Tópico não encontrado</h2>
-                    <p>O caminho <code>{pathname}</code> não existe.</p>
+               <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minHeight: '60vh',
+                    fontSize: '16px',
+                    color: '#666'
+               }}>
+                    {loading ? '🔍 Carregando estrutura...' : '📝 Preparando documento...'}
+               </div>
+          );
+     }
+
+     // --- 404 ---
+     if (!foundTopic || notFound) {
+          return (
+               <div style={{
+                    padding: '40px',
+                    maxWidth: '800px',
+                    margin: '0 auto'
+               }}>
+                    <h2 style={{ color: '#e74c3c', marginBottom: '16px' }}>
+                         404 - Tópico não encontrado
+                    </h2>
+                    <p style={{ marginBottom: '12px' }}>
+                         O caminho <code style={{
+                              background: '#f4f4f4',
+                              padding: '2px 6px',
+                              borderRadius: '3px'
+                         }}>{pathname}</code> não existe na estrutura de documentação.
+                    </p>
+                    <p style={{ color: '#666', marginTop: '20px' }}>
+                         Verifique se o link está correto ou volte para a página inicial.
+                    </p>
                </div>
           );
      }
 
      // --- RENDERIZAÇÃO ---
-     // Aqui usamos o seu DocLayout como template!
+     const documentId = generateDocId(pathname);
+
      return (
           <DocLayout
-               // Usa o label do tópico como título
-               title={foundTopic.label}
-
-               // Como ainda não salvamos data no tópico, usamos a data atual ou um placeholder
-               date={foundTopic.createdAt ? new Date(foundTopic.createdAt).toLocaleDateString() : new Date().toLocaleDateString()}
-
-               // Como ainda não salvamos descrição, usamos um placeholder
-               description={foundTopic.description || `Conteúdo sobre ${foundTopic.label}`}
-          >
-               {/* AQUI VAI O CONTEÚDO REAL DO TÓPICO (O texto grande).
-                Por enquanto, como não temos um campo "content" no banco,
-                vou colocar um texto genérico.
-            */}
-               <div className="conteudo-dinamico">
-                    <p>Este é o conteúdo dinâmico carregado do Firestore para o tópico <strong>{foundTopic.label}</strong>.</p>
-                    <p>Futuramente, aqui aparecerá o texto rico que você salvar num editor.</p>
-               </div>
-          </DocLayout>
+               documentId={documentId}
+               collectionName="DocContent"
+          />
      );
 };
 

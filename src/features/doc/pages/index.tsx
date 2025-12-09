@@ -1,66 +1,25 @@
 // src\features\doc\pages\index.tsx
+import { useLocation } from 'react-router-dom';
 import './doc.css'
 
 // Layout
 import DocLayout from '@/components/layout/DocLayout';
 
+
 const DocIntroducao = () => {
+     const { pathname } = useLocation();
+     // Função centralizada para gerar IDs consistentes
+     const generateDocId = (pathname: string): string => {
+          // Remove a primeira barra e substitui as demais por hífen
+          // Ex: /docs/documento/futuro -> docs-documento-futuro
+          return pathname.replace(/^\//, '').replace(/\//g, '-');
+     };
+
+     // --- RENDERIZAÇÃO ---
+     const documentId = generateDocId(pathname);
+
      return (
-          <DocLayout
-               date={"02/12/2025"}
-               title={"Introdução ao Doc"}
-               description={'Introdução de teste da modularização do ato de documentar'}
-               sections={[
-                    {
-                         subTitle: "O que é isso?",
-                         content: "Isso aqui é um sistema feito afim de testes de modularidade de documentação"
-                    },
-                    {
-                         subTitle: "Por quê?",
-                         content: "Treinamento de digitação de código e de desenvolvimento de sites React"
-                    },
-                    {
-                         subTitle: "O que é isso?",
-                         content: "Isso aqui é um sistema feito afim de testes de modularidade de documentação"
-                    },
-                    {
-                         subTitle: "Por quê?",
-                         content: "Treinamento de digitação de código e de desenvolvimento de sites React"
-                    },
-                    {
-                         subTitle: "O que é isso?",
-                         content: "Isso aqui é um sistema feito afim de testes de modularidade de documentação"
-                    },
-                    {
-                         subTitle: "Por quê?",
-                         content: "Treinamento de digitação de código e de desenvolvimento de sites React"
-                    },
-                    {
-                         subTitle: "O que é isso?",
-                         content: "Isso aqui é um sistema feito afim de testes de modularidade de documentação"
-                    },
-                    {
-                         subTitle: "Por quê?",
-                         content: "Treinamento de digitação de código e de desenvolvimento de sites React"
-                    },
-                    {
-                         subTitle: "O que é isso?",
-                         content: "Isso aqui é um sistema feito afim de testes de modularidade de documentação"
-                    },
-                    {
-                         subTitle: "Por quê?",
-                         content: "Treinamento de digitação de código e de desenvolvimento de sites React"
-                    },
-                    {
-                         subTitle: "O que é isso?",
-                         content: "Isso aqui é um sistema feito afim de testes de modularidade de documentação"
-                    },
-                    {
-                         subTitle: "Por quê?",
-                         content: "Treinamento de digitação de código e de desenvolvimento de sites React"
-                    }
-               ]}
-          />
+          <DocLayout documentId={documentId} collectionName='DocContent'/>
      )
 }
 

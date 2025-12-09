@@ -6,13 +6,20 @@
      min-height: 1.5em;
 }
 
+/* Bloco vazio padrão */
 .editor-block-wrapper.is-empty {
-     min-height: 200px;
+     min-height: 24px;
      cursor: text;
      display: flex;
      align-items: flex-start;
 }
 
+/* Último bloco vazio */
+.editor-block-wrapper.is-empty-final {
+     min-height: 200px;
+}
+
+/* Conteúdo editável */
 .editor-input {
      width: 100%;
      min-height: 1.5em;
@@ -43,6 +50,7 @@
      line-height: 1.2;
 }
 
+/* Lista */
 .editor-list-wrapper {
      display: flex;
      align-items: flex-start;
@@ -58,6 +66,7 @@
      flex-shrink: 0;
 }
 
+/* Placeholder */
 .is-empty .editor-input::before {
      content: attr(data-placeholder);
      color: #ccc;

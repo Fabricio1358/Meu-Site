@@ -19,6 +19,9 @@ import {
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
+// pseudo: services/firestoreService.ts (dentro da função update)
+import { sanitizeForFirestore } from './firestoreHelpers';
+
 export interface FirestoreService {
     // CRUD básico
     create<T>(collectionName: string, data: T): Promise<string>;
@@ -70,13 +73,15 @@ class FirebaseFirestoreService implements FirestoreService {
     }
 
     async update(collectionName: string, id: string, data: Partial<unknown>): Promise<void> {
+     const sanitized = sanitizeForFirestore(data);
+     
         try {
             const docRef = doc(db, collectionName, id);
 
             const snap = await getDoc(docRef);
             if (!snap.exists()) throw new Error("Documento não encontrado!");
             
-            await updateDoc(docRef, data as DocumentData);
+            await updateDoc(docRef, sanitized as DocumentData);
         } catch (error) {
             throw new Error(`Erro ao atualizar documento: ${error}`);
         }
