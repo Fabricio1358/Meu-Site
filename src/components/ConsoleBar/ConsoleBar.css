@@ -1,0 +1,18 @@
+.console-bar {
+     display: flex;
+     position: fixed;
+     bottom: 30px;
+     left: 50%;
+     transform: translate(-50%, 50px);
+     width: fit-content;
+     padding: 1rem 1.6rem;
+     border-radius: 8px;
+     opacity: 0;
+     transition: opacity 0.35s ease, transform 0.35s ease;
+     z-index: 9999;
+}
+
+.console-bar.visible {
+     opacity: 1;
+     transform: translate(-50%, 0);
+}

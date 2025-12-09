@@ -1,1 +1,0 @@
-// Responsividade via JS

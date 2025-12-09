@@ -1,32 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-// src/components/layout/DocLayout/index.tsx
+// src\features\doc\layout\DocContentLayout\index.tsx
 import './DocLayout.css';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+
+// Firestore
 import { useDocument } from '@/hooks/useFirestore';
 import { firestoreService } from '@/services/firestoreService';
 
-import {
-     EditorBlock,
-     type Block,
-     type BlockType
-} from '@/components/ui/DocEditor/EditorBlock';
+// Ui
 
-interface DocLayoutProps {
-     documentId: string;
-     collectionName?: string;
-}
 
-interface DocumentData {
-     id?: string;
-     date: string;
-     title: string;
-     description: string;
-     blocks: Block[];
-     updatedAt: number;
-}
+// Components
+import { useConsoleBar } from '@/components/ConsoleBar/ConsoleBarContext';
 
-const DocLayout = ({ documentId, collectionName = 'DocContent' }: DocLayoutProps) => {
+// Types
+import type { DocLayoutProps, DocumentData } from '../../types/DocLayoutTypes';
+import type { Block, BlockType } from '../../types/DocUiTypes';
+import { EditorBlock } from '../../ui/DocEditor/EditorBlock';
+
+
+
+const DocLayout: React.FC<DocLayoutProps> = ({ documentId, collectionName = 'DocContent' }: DocLayoutProps) => {
+     const { openBar } = useConsoleBar();
      // Busca documento do Firebase
      const { document, loading, error } = useDocument<DocumentData>(collectionName, documentId);
 
@@ -35,8 +31,6 @@ const DocLayout = ({ documentId, collectionName = 'DocContent' }: DocLayoutProps
           { id: uuidv4(), type: 'paragraph', content: '' }
      ]);
      const [focusId, setFocusId] = useState<string | null>(null);
-     const [saving, setSaving] = useState(false);
-     const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
      // Ref para evitar loop infinito
      const isInitializedRef = useRef(false);
@@ -53,9 +47,7 @@ const DocLayout = ({ documentId, collectionName = 'DocContent' }: DocLayoutProps
      const lastSavedRef = useRef<Block[] | null>(null);
 
      const saveToFirebase = useCallback(async (blocksToSave: Block[]) => {
-          // Só salva se realmente mudou
           if (JSON.stringify(lastSavedRef.current) === JSON.stringify(blocksToSave)) {
-               console.log("⏩ Nenhuma mudança, não salvou.");
                return;
           }
 
@@ -63,19 +55,18 @@ const DocLayout = ({ documentId, collectionName = 'DocContent' }: DocLayoutProps
           lastSavedRef.current = blocksToSave;
 
           try {
-               setSaving(true);
-
                await firestoreService.update(collectionName, documentId, {
                     blocks: blocksToSave,
                     updatedAt: Date.now()
                });
-
-               setLastSaved(new Date());
-               console.log("✅ Salvo!");
-          } catch (err) {
-               console.error("❌ Erro ao salvar:", err);
-          } finally {
-               setSaving(false);
+          } catch (error) {
+               openBar({
+                    info: "Erro ao salvar dados no Firestore",
+                    error: error,
+                    backgroundColor: "red",
+                    code: 404,
+                    type: "Error"
+               })
           }
      }, [collectionName, documentId]);
 
@@ -160,11 +151,18 @@ const DocLayout = ({ documentId, collectionName = 'DocContent' }: DocLayoutProps
 
      // Error state
      if (error) {
+          openBar({
+               info: "Falha ao carregar conteúdo!",
+               error: error,
+               code: 404,
+               backgroundColor: "red",
+               type: "Success"
+          });
           return (
                <main className='docLayout-main'>
                     <div className='docLayout-content'>
-                         <div style={{ padding: '2rem', color: '#e74c3c' }}>
-                              Erro ao carregar documento: {error}
+                         <div style={{ padding: '2rem', textAlign: 'center' }}>
+                              Erro ao carregar documento
                          </div>
                     </div>
                </main>
@@ -175,42 +173,6 @@ const DocLayout = ({ documentId, collectionName = 'DocContent' }: DocLayoutProps
 
      return (
           <main className='docLayout-main'>
-               {/* Indicador de salvamento */}
-               {saving && (
-                    <div style={{
-                         position: 'fixed',
-                         bottom: '30px',
-                         right: '20px',
-                         background: '#3498db',
-                         color: 'white',
-                         padding: '8px 16px',
-                         borderRadius: '4px',
-                         fontSize: '14px',
-                         zIndex: 1000,
-                         boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
-                    }}>
-                         💾 Salvando...
-                    </div>
-               )}
-
-               {/* Indicador de último salvamento */}
-               {!saving && lastSaved && (
-                    <div style={{
-                         position: 'fixed',
-                         bottom: '30px',
-                         right: '20px',
-                         background: '#27ae60',
-                         color: 'white',
-                         padding: '8px 16px',
-                         borderRadius: '4px',
-                         fontSize: '14px',
-                         zIndex: 1000,
-                         boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
-                    }}>
-                         ✓ Salvo {lastSaved.toLocaleTimeString('pt-BR')}
-                    </div>
-               )}
-
                <div className='docLayout-content'>
                     <span className='docLayout-date'>{document?.date || new Date().toLocaleDateString('pt-BR')}</span>
                     <h1>{document?.title || 'Novo Documento'}</h1>

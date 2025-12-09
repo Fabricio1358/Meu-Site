@@ -1,35 +1,24 @@
+// src\features\doc\layout\DocSidebarLayout\index.tsx
 import './SidebarLayout.css';
 import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-// UI e Types
-import Group from "@/components/ui/Group";
-import DocButton from "@/components/ui/DocButton";
+// UI
+import Group from "@/features/doc/ui/DocGroup";
+import DocButton from "@/features/doc/ui/DocButton";
 
 // Firestore
 import { useFirestore } from '@/hooks/useFirestore';
 import { firestoreService, queryHelpers } from '@/services/firestoreService';
 
-interface SidebarLayoutProps {
-     variant: "docs" | "custom" | "none";
-}
+// Components
+import { useConsoleBar } from '@/components/ConsoleBar/ConsoleBarContext';
 
-// Estrutura padronizada dos links
-interface LinkType {
-     label: string;
-     to: string;
-     createdAt: number;
-}
-
-// Estrutura padronizada das seções
-interface SecaoFirestore {
-     id?: string;
-     title: string;
-     links: LinkType[];
-     createdAt: number;
-}
+// Types
+import type { LinkType, SecaoFirestore, SidebarLayoutProps } from '../../types/DocLayoutTypes';
 
 const SidebarLayout = ({ variant }: SidebarLayoutProps) => {
+     const { openBar } = useConsoleBar();
      const navigate = useNavigate();
      useLocation();
      const inputRef = useRef<HTMLInputElement>(null);
@@ -48,7 +37,7 @@ const SidebarLayout = ({ variant }: SidebarLayoutProps) => {
           }
      }, [tempNewSection, addingTopicTo]);
 
-     // --- FUNÇÃO DE SLUG PADRONIZADA ---
+     // Slug
      const createSlug = (text: string): string => {
           return text
                .toLowerCase()
@@ -58,7 +47,6 @@ const SidebarLayout = ({ variant }: SidebarLayoutProps) => {
                .replace(/[^\w-]/g, ''); // Remove caracteres especiais
      };
 
-     // --- ADICIONAR SEÇÃO ---
      const handleAddSection = () => {
           setTempNewSection(true);
           setAddingTopicTo(null);
@@ -72,7 +60,6 @@ const SidebarLayout = ({ variant }: SidebarLayoutProps) => {
 
           // cria slug a partir do título da seção
           const sectionSlug = createSlug(title.trim());
-          // formato de ID que você pediu: "doc-nomesecao"
           const sectionId = `doc-${sectionSlug}`;
 
           try {
@@ -85,7 +72,6 @@ const SidebarLayout = ({ variant }: SidebarLayoutProps) => {
                     return;
                }
 
-               // Cria a nova seção com ID customizado
                await createComId(
                     {
                          title: title.trim(),
@@ -96,14 +82,17 @@ const SidebarLayout = ({ variant }: SidebarLayoutProps) => {
                );
 
                setTempNewSection(false);
-               console.log(`✅ Seção criada: ${sectionId}`);
           } catch (error) {
-               console.error("Erro ao criar seção:", error);
-               alert("Erro ao criar seção.");
+               openBar({
+                    info: "Erro ao criar seção:",
+                    error: error,
+                    code: 404,
+                    backgroundColor: "red",
+                    type: "Error"
+               })
           }
      };
 
-     // --- ADICIONAR TÓPICO ---
      const handleAddTopicClick = (sectionId: string) => {
           setAddingTopicTo(sectionId);
           setTempNewSection(false);
@@ -131,7 +120,7 @@ const SidebarLayout = ({ variant }: SidebarLayoutProps) => {
                     return;
                }
 
-               // Cria novo link padronizado (SEM campo 'title')
+               // Cria novo link
                const newLink: LinkType = {
                     label: topicName.trim(),
                     to: newPath,
@@ -147,19 +136,22 @@ const SidebarLayout = ({ variant }: SidebarLayoutProps) => {
                     links: updatedLinks
                });
 
-               console.log(`✅ Tópico criado: ${newPath}`);
-
                // Limpa estado e navega
                setAddingTopicTo(null);
                navigate(newPath);
 
           } catch (error) {
-               console.error("Erro ao adicionar tópico:", error);
-               alert("Erro ao salvar tópico.");
+               openBar({
+                    info: "rro ao adicionar tópico:",
+                    error: error,
+                    code: 404,
+                    backgroundColor: "red",
+                    type: "Error"
+               })
           }
      };
 
-     // --- HANDLERS DE TECLADO ---
+     // Handles de Teclado
      const handleKeyDown = (
           e: React.KeyboardEvent,
           text: string,
@@ -187,7 +179,7 @@ const SidebarLayout = ({ variant }: SidebarLayoutProps) => {
                               <h4>Introdução</h4>
                          </Link>
 
-                         {/* Input de Nova Seção */}
+                         {/* Nova Seção */}
                          {tempNewSection && (
                               <Group
                                    title={
@@ -218,7 +210,7 @@ const SidebarLayout = ({ variant }: SidebarLayoutProps) => {
                                              </div>
                                         ))}
 
-                                        {/* Input de Novo Tópico OU Botão */}
+                                        {/* Novo Tópico */}
                                         <div style={{ marginTop: '8px' }}>
                                              {addingTopicTo === group.id ? (
                                                   <input

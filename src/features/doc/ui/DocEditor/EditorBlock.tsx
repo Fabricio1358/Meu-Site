@@ -1,24 +1,8 @@
 import './DocEditor.css';
 import React, { useRef, useEffect, useLayoutEffect, useState } from 'react';
 
-export type BlockType = 'paragraph' | 'heading' | 'list';
-
-export interface Block {
-     id: string;
-     type: BlockType;
-     content: string;
-     level?: 2 | 3;
-}
-
-interface EditorBlockProps {
-     block: Block;
-     updateBlock: (id: string, content: string) => void;
-     transformBlock: (id: string, newType: BlockType, newLevel?: 2 | 3) => void;
-     addBlock: (currentId: string) => void;
-     removeBlock: (id: string) => void;
-     focusId: string | null;
-     isLastBlock: boolean;
-}
+// Types
+import type { BlockType, EditorBlockProps } from '../../types/DocUiTypes';
 
 const setCaretToEnd = (element: HTMLElement) => {
      const range = document.createRange();
@@ -89,6 +73,7 @@ export const EditorBlock = ({
      };
 
      const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+
           if (e.key === 'Enter' && !e.shiftKey) {
                e.preventDefault();
                setWasEnterPressed(true);
@@ -97,13 +82,14 @@ export const EditorBlock = ({
           if (e.key === 'Backspace') {
                const selection = window.getSelection();
                const isAtStart = selection?.anchorOffset === 0 && selection.isCollapsed;
+               const blockContentTrimed = block.content.trim()
 
                if (isAtStart && block.type !== 'paragraph') {
                     e.preventDefault();
                     transformBlock(block.id, 'paragraph');
                     return;
                }
-               if (block.content === '') {
+               if (blockContentTrimed === "") {
                     e.preventDefault();
                     removeBlock(block.id);
                }
@@ -117,10 +103,10 @@ export const EditorBlock = ({
      };
 
      const wrapperClass = `editor-block-wrapper ${block.type === 'paragraph' && isEmpty && isLastBlock
-               ? 'is-empty-final'
-               : block.type === 'paragraph' && isEmpty
-                    ? 'is-empty'
-                    : ''
+          ? 'is-empty-final'
+          : block.type === 'paragraph' && isEmpty
+               ? 'is-empty'
+               : ''
           }`;
 
      if (block.type === 'heading') {

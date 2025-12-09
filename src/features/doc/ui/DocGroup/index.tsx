@@ -1,12 +1,10 @@
 // src\components\ui\Group\index.tsx
 import './Group.css'
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 
-interface GroupProps {
-     title: React.ReactNode;
-     children: React.ReactNode;
-}
+// Types
+import type { GroupProps } from '../../types/DocUiTypes';
 
 const Group = ({ title, children }: GroupProps) => {
      const [isOpen, setIsOpen] = useState(false)

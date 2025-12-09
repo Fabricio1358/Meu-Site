@@ -1,1 +1,0 @@
-Configurações de inicialização (ex: firebase-setup.ts, envs)

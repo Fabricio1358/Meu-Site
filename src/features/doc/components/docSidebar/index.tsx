@@ -1,5 +1,5 @@
-// src/features/doc/components/docSidebar/index.tsx
-import SidebarLayout from "@/components/layout/SidebarLayout";
+// src\features\doc\components\DocSidebar\index.tsx
+import SidebarLayout from "@/features/doc/layout/DocSidebarLayout";
 
 const DocSidebar = () => {
      return (

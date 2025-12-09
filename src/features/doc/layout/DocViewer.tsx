@@ -1,32 +1,29 @@
+// src\features\doc\layout\DocViewer.tsx
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from 'react';
-import DocLayout from '@/components/layout/DocLayout';
+import DocLayout from '@/features/doc/layout/DocContentLayout';
+
+// Hooks
 import { useFirestore } from '@/hooks/useFirestore';
+
+// Services
 import { firestoreService } from '@/services/firestoreService';
 import { queryHelpers } from '@/services/firestoreService';
 
-// Tipagem padronizada
-interface LinkType {
-     label: string;
-     to: string;
-     createdAt?: number;
-}
+// Components
+import { useConsoleBar } from "@/components/ConsoleBar/ConsoleBarContext";
 
-interface SecaoFirestore {
-     id?: string;
-     title: string;
-     links: LinkType[];
-     createdAt: number;
-}
+// Types
+import type { LinkType, SecaoFirestore } from "../types/DocLayoutTypes";
 
-// Função centralizada para gerar IDs consistentes
+// Função centralizada para gerar IDs
 const generateDocId = (pathname: string): string => {
-     // Remove a primeira barra e substitui as demais por hífen
      // Ex: /docs/documento/futuro -> docs-documento-futuro
      return pathname.replace(/^\//, '').replace(/\//g, '-');
 };
 
 const DocViewer = () => {
+     const { openBar } = useConsoleBar();
      const { pathname } = useLocation();
      const [initializing, setInitializing] = useState(false);
      const [notFound, setNotFound] = useState(false);
@@ -37,7 +34,7 @@ const DocViewer = () => {
           [queryHelpers.orderByDesc('createdAt')]
      );
 
-     // --- BUSCA O TÓPICO CORRESPONDENTE ---
+     // Tópico correspondente
      let foundTopic: LinkType | null = null;
      let sectionTitle = '';
 
@@ -52,7 +49,7 @@ const DocViewer = () => {
           }
      }
 
-     // --- INICIALIZA DOCUMENTO NO FIREBASE ---
+     // Inicia documentos
      useEffect(() => {
           if (loading || !foundTopic) return;
 
@@ -68,47 +65,40 @@ const DocViewer = () => {
 
                     // Se não existe, cria com estrutura inicial
                     if (!existingDoc) {
-                         console.log(`Criando documento: ${documentId}`);
-
                          await firestoreService.createWithId('DocContent', documentId, {
                               // Metadados do documento
                               title: foundTopic.label,
                               description: `Documentação sobre ${foundTopic.label}`,
                               date: new Date().toLocaleDateString('pt-BR'),
-
-                              // Bloco inicial vazio
                               blocks: [{
                                    id: crypto.randomUUID(),
                                    type: 'paragraph',
                                    content: ''
                               }],
-
-                              // Referências de organização
                               pathname: pathname,
                               section: sectionTitle,
-
-                              // Timestamps
                               createdAt: Date.now(),
                               updatedAt: Date.now()
                          });
-
-                         console.log(`✅ Documento criado: ${documentId}`);
-                    } else {
-                         console.log(`✅ Documento já existe: ${documentId}`);
                     }
 
                } catch (error) {
-                    console.error('❌ Erro ao inicializar documento:', error);
-                    setNotFound(true);
+                    openBar({
+                         info: "Erro ao inicializar documento:",
+                         error: error,
+                         code: 404,
+                         backgroundColor: "red",
+                         type: "Error"
+                    })
                } finally {
                     setInitializing(false);
                }
           };
 
           initializeDocument();
-     }, [pathname, foundTopic, loading, sectionTitle]);
+     }, [pathname, foundTopic, loading, sectionTitle, openBar]);
 
-     // --- LOADING ---
+     // Loading
      if (loading || initializing) {
           return (
                <div style={{
@@ -124,8 +114,14 @@ const DocViewer = () => {
           );
      }
 
-     // --- 404 ---
+     // 404
      if (!foundTopic || notFound) {
+          openBar({
+               info: "Tópico não encontrado!",
+               code: 404,
+               backgroundColor: "red",
+               type: "Error"
+          })
           return (
                <div style={{
                     padding: '40px',
@@ -149,7 +145,7 @@ const DocViewer = () => {
           );
      }
 
-     // --- RENDERIZAÇÃO ---
+     // Render
      const documentId = generateDocId(pathname);
 
      return (

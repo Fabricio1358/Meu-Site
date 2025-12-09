@@ -1,1 +1,0 @@
-Configurações de bibliotecas (ex: axios-instance.ts, query-client.ts)

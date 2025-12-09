@@ -1,10 +1,9 @@
-// src/components/Header/index.tsx
+// src\layouts\components\Header\index.tsx
 import './Header.css'
 import { Link } from 'react-router-dom'
 
-interface HeaderProps {
-     onSetSidebar: (value: boolean) => void
-}
+// Types
+import type { HeaderProps } from '@/types/HeaderTypes';
 
 const Header = ({ onSetSidebar }: HeaderProps) => {
      return (

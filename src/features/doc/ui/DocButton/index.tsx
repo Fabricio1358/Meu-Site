@@ -1,16 +1,8 @@
-// src\components\ui\DocButton\index.tsx
+// src\features\doc\ui\DocButton\index.tsx
 import './DocButton.css'
-import type { MouseEventHandler } from 'react';
 
-interface DocButtonProps {
-     action: MouseEventHandler;
-     style: 'whole' | 'outline';
-     text?: string;
-     width: string;
-     height: string;
-     border?: string;
-     borderRadius?: string;
-}
+// Types
+import type { DocButtonProps } from '../../types/DocUiTypes';
 
 const DocButton = ({ action, style, text, width, height, border, borderRadius }: DocButtonProps) => {
      return (

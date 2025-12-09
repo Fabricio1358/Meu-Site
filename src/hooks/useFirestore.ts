@@ -4,10 +4,14 @@ import { useState, useEffect, useRef } from 'react';
 import { type QueryConstraint } from 'firebase/firestore';
 import { firestoreService } from '@/services/firestoreService';
 
+// Components
+import { useConsoleBar } from '@/components/ConsoleBar/ConsoleBarContext';
+
 export const useFirestore = <T extends { id?: string }>(
     collectionName: string,
     constraints: QueryConstraint[] = []
 ) => {
+    const { openBar } = useConsoleBar();
     const [data, setData] = useState<T[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -38,9 +42,16 @@ export const useFirestore = <T extends { id?: string }>(
             setError(null);
             const id = await firestoreService.create(collectionName, newData);
             return id;
-        } catch (err: any) {
-            setError(err.message || 'Erro ao criar');
-            throw err;
+        } catch (error: any) {
+          openBar({
+                    info: "Erro ao criar:",
+                    error: error,
+                    code: 500,
+                    backgroundColor: "red",
+                    type: "Error"
+               })
+            setError(error.message || 'Erro ao criar');
+            throw error;
         }
     };
 
@@ -49,9 +60,16 @@ export const useFirestore = <T extends { id?: string }>(
             setError(null);
             await firestoreService.createWithId(collectionName, id, newData);
             return id;
-        } catch (err: any) {
-            setError(err.message || 'Erro ao criar com ID');
-            throw err;
+        } catch (error: any) {
+          openBar({
+                    info: "Erro ao criar com ID:",
+                    error: error,
+                    code: 500,
+                    backgroundColor: "red",
+                    type: "Error"
+               })
+            setError(error.message || 'Erro ao criar com ID');
+            throw error;
         }
     };
 
@@ -59,9 +77,16 @@ export const useFirestore = <T extends { id?: string }>(
         try {
             setError(null);
             await firestoreService.update(collectionName, id, updateData);
-        } catch (err: any) {
-            setError(err.message || 'Erro ao atualizar');
-            throw err;
+        } catch (error: any) {
+          openBar({
+                    info: "Erro ao atualizar:",
+                    error: error,
+                    code: 500,
+                    backgroundColor: "red",
+                    type: "Error"
+               })
+            setError(error.message || 'Erro ao atualizar');
+            throw error;
         }
     };
 
@@ -69,9 +94,16 @@ export const useFirestore = <T extends { id?: string }>(
         try {
             setError(null);
             await firestoreService.delete(collectionName, id);
-        } catch (err: any) {
-            setError(err.message || 'Erro ao deletar');
-            throw err;
+        } catch (error: any) {
+          openBar({
+                    info: "Erro ao deletar:",
+                    error: error,
+                    code: 500,
+                    backgroundColor: "red",
+                    type: "Error"
+               })
+            setError(error.message || 'Erro ao deletar');
+            throw error;
         }
     };
 
